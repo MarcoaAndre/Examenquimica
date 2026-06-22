@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Química Orgánica · Ronda 2 de práctica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1B1F1C;
+    --bg-soft: #20251F;
+    --panel: #242A23;
+    --ink: #EDE8DD;
+    --ink-dim: #B9B6A9;
+    --line: #3A4138;
+    --green: #8FBE6B;
+    --green-dim: #5C7A47;
+    --amber: #D9A653;
+    --blue: #6FA0C4;
+    --red: #C77B6B;
+    --display: 'Fraunces', serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 36px 36px;
+    opacity:0.06;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{ max-width: 920px; margin: 0 auto; padding: 0 28px; position:relative; z-index:1; }
+
+  nav{
+    position: sticky; top:0; z-index:50;
+    background: rgba(27,31,28,0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner{
+    max-width: 920px; margin:0 auto; padding: 14px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 16px;
+  }
+  .brand{
+    font-family: var(--mono); font-size:13px; letter-spacing:0.06em;
+    color: var(--ink-dim); text-transform:uppercase;
+    display:flex; align-items:center; gap:8px;
+  }
+  .brand .dot{ color: var(--amber); }
+  .navlinks{ display:flex; gap:22px; font-size:13.5px; }
+  .navlinks a{
+    color: var(--ink-dim); text-decoration:none;
+    border-bottom: 1px solid transparent;
+    padding-bottom:2px;
+    transition: color .15s, border-color .15s;
+  }
+  .navlinks a:hover{ color: var(--ink); border-color: var(--amber); }
+  @media (max-width: 640px){ .navlinks{ display:none; } }
+
+  header.hero{
+    padding: 80px 0 48px;
+    position:relative;
+    overflow:hidden;
+    scroll-margin-top: 80px;
+  }
+  .eyebrow{
+    font-family: var(--mono); font-size:12.5px; letter-spacing:0.12em;
+    color: var(--amber); text-transform:uppercase;
+    margin-bottom: 18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{ content:""; width:18px; height:1px; background: var(--amber); }
+  h1{
+    font-family: var(--display);
+    font-weight:600;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    line-height: 1.05;
+    margin: 0 0 20px;
+    letter-spacing: -0.01em;
+  }
+  h1 em{ font-style: italic; color: var(--green); font-weight:500; }
+  .hero-sub{ max-width: 560px; color: var(--ink-dim); font-size: 16.5px; }
+
+  .hero-meta{ margin-top:32px; display:flex; gap: 26px; flex-wrap:wrap; }
+  .meta-item{ display:flex; flex-direction:column; gap:4px; }
+  .meta-item .num{ font-family: var(--display); font-size:1.7rem; color: var(--ink); font-style:italic; }
+  .meta-item .label{ font-size:11.5px; color: var(--ink-dim); text-transform:uppercase; letter-spacing:0.06em; }
+
+  section{ padding: 56px 0; border-top: 1px solid var(--line); scroll-margin-top: 80px; }
+  .section-head{ margin-bottom: 30px; display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+  .section-tag{
+    font-family: var(--mono); font-size:12px; color: var(--amber);
+    letter-spacing:0.08em; text-transform:uppercase;
+    border:1px solid var(--green-dim); border-radius:100px;
+    padding: 4px 12px;
+    white-space:nowrap;
+  }
+  h2{
+    font-family: var(--display); font-weight:600;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    margin:0; letter-spacing:-0.01em;
+  }
+  .section-intro{ color: var(--ink-dim); max-width:620px; margin: 12px 0 0; font-size:15px; }
+
+  /* quiz cards */
+  .quiz-card{
+    background: var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding: 22px; margin-bottom:16px;
+  }
+  .quiz-card.is-new{ border-left: 3px solid var(--blue); }
+  .quiz-card .qn{
+    font-family: var(--mono); color: var(--amber); font-size:13px;
+    margin-bottom:8px; display:flex; align-items:center; gap:10px;
+  }
+  .new-badge{
+    font-family: var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:0.05em;
+    background: rgba(111,160,196,0.18); color: var(--blue);
+    border-radius:100px; padding:2px 9px;
+  }
+  .quiz-card .qtext{ font-size:14.5px; margin-bottom:16px; color: var(--ink); }
+  .opt-list{ display:flex; flex-direction:column; gap:8px; }
+  .opt{
+    display:flex; align-items:center; gap:10px;
+    padding: 9px 12px; border-radius:7px; border:1px solid var(--line);
+    font-size:14px; color: var(--ink-dim);
+    cursor:pointer; transition: border-color .15s, color .15s, background .15s;
+    background: var(--bg-soft);
+  }
+  .opt:hover{ border-color: var(--green-dim); color: var(--ink); }
+  .opt .bullet{
+    width:16px; height:16px; border-radius:50%; border:1.5px solid var(--ink-dim);
+    flex-shrink:0; transition: all .15s; position:relative;
+  }
+  .opt.correct .bullet{ border-color: var(--green); background: var(--green); }
+  .opt.correct .bullet::after{ content:""; position:absolute; inset:3px; border-radius:50%; background: var(--bg); }
+  .opt.wrong .bullet{ border-color: var(--red); }
+  .opt.correct{ border-color: var(--green); color: var(--ink); }
+  .opt.wrong{ border-color: var(--red); color: var(--ink); }
+
+  .quiz-explain{
+    margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);
+    font-size:13.5px; color: var(--ink-dim); line-height:1.55;
+    display:none;
+  }
+  .quiz-explain.show{ display:block; }
+  .quiz-explain strong{ color: var(--green); }
+
+  /* progress */
+  .progress-bar{
+    position: sticky; top:53px; z-index:40;
+    height:4px; background: var(--line);
+  }
+  .progress-fill{
+    height:100%; background: var(--amber); width:0%;
+    transition: width .25s ease;
+  }
+
+  footer{ padding: 44px 0 64px; text-align:center; color: var(--ink-dim); font-size:13px; }
+  footer .dot-row{ color: var(--amber); margin-bottom:10px; letter-spacing:4px; }
+
+  .fade-up{ opacity:0; transform: translateY(14px); animation: fadeUp .55s ease forwards; }
+  @keyframes fadeUp{ to{ opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce){ .fade-up{ animation:none; opacity:1; transform:none; } html{ scroll-behavior:auto; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand"><span class="dot">●</span> RONDA 2 · PRÁCTICA</div>
+    <div class="navlinks">
+      <a href="#reformuladas">Reformuladas</a>
+      <a href="#nuevas">Nuevas</a>
+    </div>
+  </div>
+</nav>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<header class="wrap hero">
+  <div class="eyebrow fade-up">Segunda ronda · Mismos temas, otro ángulo</div>
+  <h1 class="fade-up" style="animation-delay:.05s">Practica otra vez, <em>sin memorizar el orden</em></h1>
+  <p class="hero-sub fade-up" style="animation-delay:.1s">
+    Las 11 preguntas originales reformuladas con otro orden de palabras, más 8 preguntas nuevas
+    sobre los temas que aún no habíamos puesto a prueba: enlaces, hidrocarburos, grupos
+    funcionales y la importancia del carbono en los seres vivos.
+  </p>
+  <div class="hero-meta fade-up" style="animation-delay:.15s">
+    <div class="meta-item"><span class="num">11</span><span class="label">Reformuladas</span></div>
+    <div class="meta-item"><span class="num">8</span><span class="label">Nuevas</span></div>
+    <div class="meta-item"><span class="num">19</span><span class="label">Total preguntas</span></div>
+  </div>
+</header>
+
+<section id="reformuladas" class="wrap">
+  <div class="section-head">
+    <span class="section-tag">Parte 1</span>
+    <h2>Las mismas ideas, otro orden de palabras</h2>
+  </div>
+  <p class="section-intro">Si en la primera ronda reconociste la frase de memoria, aquí tendrás que reconocer el concepto.</p>
+
+  <div class="quiz-card" data-correct="0">
+    <span class="qn">1)</span>
+    <div class="qtext">Hoy en día se conocen más de 24 millones de compuestos que contienen carbono, los cuales pertenecen al área de la química que estudia precisamente esos compuestos. ¿A qué se refiere el texto?</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Química Orgánica</div>
+      <div class="opt" data-idx="1">b) Química Inorgánica</div>
+      <div class="opt" data-idx="2">c) Compuestos tetravalentes</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> es la misma definición de la pregunta 1 original, solo que aquí el dato de los 24 millones de compuestos aparece primero y la pregunta por el nombre del área va al final.</div>
+  </div>
+
+  <div class="quiz-card" data-correct="2">
+    <span class="qn">2)</span>
+    <div class="qtext">Según la escala de Pauling, el carbono presenta un valor de 2,5, lo cual se ubica en el periodo 2 y grupo IV A de la tabla periódica, con esa propiedad intermedia entre atraer y compartir electrones. ¿Qué propiedad describe el texto?</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">Alotropismo</div>
+      <div class="opt" data-idx="1">Hibridación</div>
+      <div class="opt" data-idx="2">Electronegatividad</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> mismo dato (2,5, Pauling, grupo IV A, periodo 2) que la pregunta 2 original, reordenado para que el valor numérico aparezca antes que la ubicación en la tabla.</div>
+  </div>
+
+  <div class="quiz-card" data-correct="1">
+    <span class="qn">3)</span>
+    <div class="qtext">La covalencia de ciertos átomos, junto con los ángulos y la geometría de las moléculas, puede explicarse gracias a un fenómeno particular del carbono. ¿Cuál es ese fenómeno?</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">Electronegatividad</div>
+      <div class="opt" data-idx="1">Hibridación de orbitales</div>
+      <div class="opt" data-idx="2">Carbono</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> la oración original empezaba con "permite explicar la geometría..."; aquí empieza por la covalencia y termina preguntando por el fenómeno, pero el concepto evaluado es idéntico: hibridación de orbitales.</div>
+  </div>
+
+  <div class="quiz-card" data-correct="0">
+    <span class="qn">4)</span>
+    <div class="qtext">Cuatro orbitales orientados hacia los vértices de un tetraedro son el resultado de combinar tres orbitales 'p' con un orbital 's'. ¿Qué nombre tiene este resultado?</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Hibridación SP3</div>
+      <div class="opt" data-idx="1">b) Hibridación SP2</div>
+      <div class="opt" data-idx="2">c) Hibridación SP</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> es la misma combinación (1s + 3p → 4 orbitales tetraédricos) que la pregunta 4 original, solo que el resultado se menciona antes que los orbitales que lo originan.</div>
+  </div>
+
+  <div class="quiz-card" data-correct="0">
+    <span class="qn">5)</span>
+    <div class="qtext">Unidos a cuatro, tres y dos grupos de átomos, los carbonos de las sustancias orgánicas presentan tres arreglos básicos de sus enlaces. ¿A qué concepto se refiere esta idea?</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">A) Geometría Molecular</div>
+      <div class="opt" data-idx="1">B) Homocombinación</div>
+      <div class="opt" data-idx="2">C) Coplanaridad</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> el dato clave (4, 3 y 2 grupos de átomos = tres arreglos básicos) es el mismo de la pregunta 5 original, solo que aquí se menciona antes de nombrar a qué átomo pertenece.</div>
+  </div>
+
+  <div class="quiz-card" data-correct="0">
+    <span class="qn">6)</span>
+    <div class="qtext">Un ángulo de 180° entre sí es lo que forman los orbitales producidos al combinarse un orbital 'p' con uno 's'. ¿Cómo se llama esta combinación?</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">A) Hibridación SP</div>
+      <div class="opt" data-idx="1">B) Hibridación SP2</div>
+      <div class="opt" data-idx="2">C) Geometría molecular</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> mismo dato que la pregunta 6 original (1s + 1p → 180°) pero el ángulo se menciona primero y la combinación de orbitales después.</div>
+  </div>
+
+  <div class="quiz-card" data-correct="1">
+    <span class="qn">7)</span>
+    <div class="qtext">Únicamente la relación entre los átomos de los elementos que forman parte del compuesto es lo que expresa cierto tipo de fórmula. ¿Cuál es esa fórmula?</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">A) Fórmula molecular</div>
+      <div class="opt" data-idx="1">B) Fórmula empírica</div>
+      <div class="opt" data-idx="2">C) Estructural</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> la pregunta original decía "expresa únicamente la relación..."; aquí esa misma idea se mantiene pero la palabra "fórmula" se menciona al final en vez de al inicio.</div>
+  </div>
+
+  <div class="quiz-card" data-correct="0">
+    <span class="qn">8)</span>
+    <div class="qtext">Con distinta estructura pero la misma fórmula condensada molecular, existen compuestos que reciben un nombre específico. ¿Cuál es ese nombre?</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Isomería</div>
+      <div class="opt" data-idx="1">b) Fórmula Molecular</div>
+      <div class="opt" data-idx="2">c) Tensión superficial</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> se invirtió el orden de "misma fórmula, distinta estructura" a "distinta estructura, misma fórmula", pero el concepto sigue siendo isomería.</div>
+  </div>
+
+  <div class="quiz-card" data-correct="1">
+    <span class="qn">9)</span>
+    <div class="qtext">Más o menos electronegativos que él son los átomos con los que el carbono tiene la capacidad de combinarse. ¿A qué propiedad hace referencia esta capacidad?</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Alotropía</div>
+      <div class="opt" data-idx="1">b) Tetravalencia</div>
+      <div class="opt" data-idx="2">c) Anfoterismo</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> mismo concepto que la pregunta 9 original (combinarse con átomos más o menos electronegativos), solo que aquí "menos o más electronegativos" se invierte a "más o menos electronegativos" y va al inicio de la oración.</div>
+  </div>
+
+  <div class="quiz-card" data-correct="0">
+    <span class="qn">10)</span>
+    <div class="qtext">La opción que se ubica entre las hibridaciones es la que presentan los átomos de carbono que conforman al diamante. ¿Cuál es esa hibridación?</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Sp3</div>
+      <div class="opt" data-idx="1">b) Sp</div>
+      <div class="opt" data-idx="2">c) Sp2</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> sigue preguntando por la hibridación del diamante, igual que la pregunta 10 original; la respuesta correcta (SP3) no cambia aunque el orden de las opciones sí.</div>
+  </div>
+
+  <div class="quiz-card" data-correct="0">
+    <span class="qn">11)</span>
+    <div class="qtext">Temperaturas de unos 2000 °C y presiones de más de 10 millones de kPa son necesarias para someter al grafito y así convertirlo en diamante. Esta característica corresponde a una propiedad. ¿Cuál es?</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Alotropía</div>
+      <div class="opt" data-idx="1">b) Tetravalencia</div>
+      <div class="opt" data-idx="2">c) Hibridación</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> se invirtió el orden temperatura/presión respecto a la pregunta 11 original, pero el dato (grafito → diamante bajo presión y calor) sigue describiendo alotropía.</div>
+  </div>
+</section>
+
+<section id="nuevas" class="wrap">
+  <div class="section-head">
+    <span class="section-tag">Parte 2</span>
+    <h2>Preguntas nuevas</h2>
+  </div>
+  <p class="section-intro">Cubren enlaces sigma/pi, hidrocarburos, grupos funcionales y la importancia del carbono en los seres vivos — temas que no estaban en la primera ronda de práctica.</p>
+
+  <div class="quiz-card is-new" data-correct="0">
+    <span class="qn">12) <span class="new-badge">Nueva</span></span>
+    <div class="qtext">Un enlace doble entre dos átomos de carbono está formado por:</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) 1 enlace sigma y 1 enlace pi</div>
+      <div class="opt" data-idx="1">b) 2 enlaces sigma</div>
+      <div class="opt" data-idx="2">c) 1 enlace sigma y 2 enlaces pi</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> todo enlace tiene exactamente 1 sigma. El doble agrega 1 pi extra; el triple agregaría 2. La opción c) describe en realidad un enlace triple.</div>
+  </div>
+
+  <div class="quiz-card is-new" data-correct="2">
+    <span class="qn">13) <span class="new-badge">Nueva</span></span>
+    <div class="qtext">El enlace pi se forma cuando dos orbitales p se superponen:</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) De frente, sobre el mismo eje</div>
+      <div class="opt" data-idx="1">b) En ángulo de 109,5°</div>
+      <div class="opt" data-idx="2">c) Lateralmente, por encima y por debajo del eje</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> la superposición frontal describe al sigma. El pi siempre es lateral, lo que lo hace más débil y restringe la rotación del enlace (de ahí la isomería cis-trans).</div>
+  </div>
+
+  <div class="quiz-card is-new" data-correct="1">
+    <span class="qn">14) <span class="new-badge">Nueva</span></span>
+    <div class="qtext">Un hidrocarburo cuya fórmula general es CₙH₂ₙ y que contiene un enlace doble se clasifica como:</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Alcano</div>
+      <div class="opt" data-idx="1">b) Alqueno</div>
+      <div class="opt" data-idx="2">c) Alquino</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> CₙH₂ₙ₊₂ es de los alcanos (saturados), CₙH₂ₙ de los alquenos (un doble enlace) y CₙH₂ₙ₋₂ de los alquinos (un triple enlace).</div>
+  </div>
+
+  <div class="quiz-card is-new" data-correct="0">
+    <span class="qn">15) <span class="new-badge">Nueva</span></span>
+    <div class="qtext">El grupo funcional –OH, con terminación "-ol", identifica a los compuestos llamados:</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Alcoholes</div>
+      <div class="opt" data-idx="1">b) Ácidos carboxílicos</div>
+      <div class="opt" data-idx="2">c) Aldehídos</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> los ácidos carboxílicos usan –COOH (terminación -oico) y los aldehídos usan –CHO (terminación -al). El –OH con "-ol" es exclusivo de los alcoholes.</div>
+  </div>
+
+  <div class="quiz-card is-new" data-correct="1">
+    <span class="qn">16) <span class="new-badge">Nueva</span></span>
+    <div class="qtext">Cuando el grupo carbonilo (C=O) se ubica en un carbono interno de la cadena —no en el extremo—, el compuesto se clasifica como:</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Aldehído</div>
+      <div class="opt" data-idx="1">b) Cetona</div>
+      <div class="opt" data-idx="2">c) Éter</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> el aldehído tiene el carbonilo en el extremo de la cadena (–CHO); cuando está en medio, se llama cetona. El éter ni siquiera tiene grupo carbonilo, sino un oxígeno entre dos carbonos (R–O–R').</div>
+  </div>
+
+  <div class="quiz-card is-new" data-correct="0">
+    <span class="qn">17) <span class="new-badge">Nueva</span></span>
+    <div class="qtext">El carbono nunca se encuentra solo en los seres vivos: se combina principalmente con hidrógeno, oxígeno, nitrógeno, fósforo y azufre. Esta variedad de combinaciones es la base de:</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Las biomoléculas (proteínas, ácidos nucleicos, lípidos, carbohidratos)</div>
+      <div class="opt" data-idx="1">b) Los metales de transición</div>
+      <div class="opt" data-idx="2">c) Las sales inorgánicas</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> esa combinación de C, H, O, N, P y S es justamente lo que permite formar las grandes familias de biomoléculas que sostienen la vida: proteínas, ADN/ARN, lípidos y carbohidratos.</div>
+  </div>
+
+  <div class="quiz-card is-new" data-correct="2">
+    <span class="qn">18) <span class="new-badge">Nueva</span></span>
+    <div class="qtext">Un carbono rodeado de solo 3 grupos de átomos (por tener un enlace doble) adopta una geometría:</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Tetraédrica, 109,5°</div>
+      <div class="opt" data-idx="1">b) Lineal, 180°</div>
+      <div class="opt" data-idx="2">c) Plana trigonal, 120°</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> 4 grupos → tetraédrica (109,5°, SP3); 3 grupos → plana trigonal (120°, SP2); 2 grupos → lineal (180°, SP). El enlace doble corresponde siempre a SP2.</div>
+  </div>
+
+  <div class="quiz-card is-new" data-correct="1">
+    <span class="qn">19) <span class="new-badge">Nueva</span></span>
+    <div class="qtext">La isomería geométrica (cis-trans) solo puede ocurrir en compuestos que tengan:</div>
+    <div class="opt-list">
+      <div class="opt" data-idx="0">a) Un anillo aromático</div>
+      <div class="opt" data-idx="1">b) Un enlace doble entre carbonos</div>
+      <div class="opt" data-idx="2">c) Solo enlaces simples</div>
+    </div>
+    <div class="quiz-explain"><strong>Por qué:</strong> el enlace pi del doble enlace impide la rotación libre alrededor del eje C=C, lo que "congela" la posición de los grupos a cada lado y permite distinguir cis (mismo lado) de trans (lados opuestos). Los enlaces simples giran libremente, así que no generan este tipo de isomería.</div>
+  </div>
+
+</section>
+
+<footer class="wrap">
+  <div class="dot-row">● ● ●</div>
+  Ronda 2 de práctica — Química 12° · Examen II semestre
+</footer>
+
+<script>
+  document.querySelectorAll('.navlinks a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if(target){
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  const allCards = document.querySelectorAll('.quiz-card');
+  const progressFill = document.getElementById('progressFill');
+  let answeredCount = 0;
+
+  function updateProgress(){
+    progressFill.style.width = (answeredCount / allCards.length * 100) + '%';
+  }
+
+  allCards.forEach(card => {
+    const correctIdx = card.dataset.correct;
+    const opts = card.querySelectorAll('.opt');
+    const explain = card.querySelector('.quiz-explain');
+    let answered = false;
+    opts.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if(answered) return;
+        answered = true;
+        answeredCount++;
+        updateProgress();
+        opts.forEach(o => {
+          if(o.dataset.idx === correctIdx){ o.classList.add('correct'); }
+          else if(o === opt){ o.classList.add('wrong'); }
+        });
+        if(explain){ explain.classList.add('show'); }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
